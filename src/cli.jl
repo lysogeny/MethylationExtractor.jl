@@ -1,4 +1,4 @@
-function parse_cli()
+function parse_cli(parseargs::Bool)
     s = ArgParse.ArgParseSettings()
     ArgParse.@add_arg_table! s begin
         "fasta"
@@ -12,6 +12,9 @@ function parse_cli()
             required = true
         "--out", "-o"
             help = "Output filtered coverage file"
+    end
+    if !parseargs
+        return
     end
     ArgParse.parse_args(ARGS, s)
 end
@@ -34,7 +37,7 @@ function filter_motif(motif::AbstractString, genome::AbstractString, in::Abstrac
 end
 
 function julia_main()::Cint
-    args = parse_cli()
+    args = parse_cli(true)
     filter_motif(args["motif"], args["fasta"], args["in"], args["out"])
     return 0
 end
