@@ -18,7 +18,7 @@ Examples:
 # Usage
 
 ```
-<PROGRAM> -m MOTIF [-o OUT] fasta in
+methylation_filter -m MOTIF [-o OUT] fasta in
 ```
 
 - `fasta` is the reference fasta file. This is required.
@@ -26,3 +26,12 @@ Examples:
 - `MOTIF` is the motif to be considered. Please see the above section on how to write these.
 - `OUT` is an optional output file. If this is not defined the output is printed to `stdout`.
 
+# Installation
+
+Download a copy of the pre-built binaries from the releases page. 
+
+If you want to build this yourself install `PackageCompiler.jl`, get a copy of this repository and use the `scripts/create_image.jl` to create a directory with binaries.
+
+Should you want to use the methods in this package, install this package. In your julia REPL type:
+
+    ] add https://github.com/lysogeny/MethylationExtractor.jl
