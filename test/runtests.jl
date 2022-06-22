@@ -26,6 +26,17 @@ end
     seq1 == seq2
 end
 
+@testset "Positions" begin
+    # Test that we can convert a CSV.Row to a position
+    genome = Genome("GRCm39.chr19.fa")
+    cpg_file = "NOMe.CpG.cov.gz"
+    #dcm_file = "DCM.cov.gz"
+    cpg_entries = CSV.File(cpg_file, header=[:seq, :pos_start, :pos_stop, :perc_meth, :n_meth, :n_unmeth])
+    pos = MethylationExtractor.Position(cpg_entries[1])
+    @test string(cpg_entries[1].seq) == pos.seq
+    @test cpg_entries[1].pos_start == pos.pos
+end
+
 @testset "context fetching" begin
     motif = motif"wCg"
     genome = Genome("GRCm39.chr19.fa")
@@ -36,6 +47,18 @@ end
     #println(fetch_context(genome, motif_cpg, cpg_entries[1]))
     @test iscontextorreverse(genome, motif, cpg_entries[1])
     #@test all(map(x -> iscontextorreverse(genome, motif_cpg, x), cpg_entries))
+    # Bases that are on the edge of the chromosome should return false as well:
+    #
+    @test iscontextorreverse(genome, motif, cpg_entries[1])
+    pos = MethylationExtractor.Position(cpg_entries[1])
+    @test iscontextorreverse(genome, motif, pos)
+end
+
+@testset "context hanging over the edge of a chromosome is not a context" begin
+    motif = motif"wCg"
+    genome = Genome("GRCm39.chr19.fa")
+    @test !iscontextorreverse(genome, motif, MethylationExtractor.Position("19", 1))
+    @test !iscontextorreverse(genome, motif, MethylationExtractor.Position("19", 61420004))
 end
 
 @testset "sample files in context" begin

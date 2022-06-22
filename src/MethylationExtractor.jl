@@ -8,6 +8,7 @@ import ArgParse
 
 include("motif.jl")
 include("genome.jl")
+include("positions.jl")
 include("context.jl")
 include("cli.jl")
 
